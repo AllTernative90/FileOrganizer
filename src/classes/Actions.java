@@ -10,15 +10,15 @@ public class Actions {
 	
 	
 	GUI _gui = (Driver._gui);
-	Logik _logik = (Driver._logik);
+	Logik _logik = (Driver._logic);
 	OptionPanes _optionPanes = (Driver._optionPanes);
 	
-	//Die Backups werden definiert für die Undo Funktion
+	//define backups for undo-method
 	String path, path_backup;
-	List<String> neuer_name = new ArrayList<String>();
-	List<String> alter_name = new ArrayList<String>();
-	List<String> alter_name_backup = new ArrayList<String>();
-	List<String> neuer_name_backup = new ArrayList<String>();
+	List<String> new_name = new ArrayList<String>();
+	List<String> old_name = new ArrayList<String>();
+	List<String> new_name_backup = new ArrayList<String>();
+	List<String> old_name_backup = new ArrayList<String>();
 	
 	
 	
@@ -50,20 +50,20 @@ public class Actions {
 				
 				
 				if (_gui.tabbedPane.getSelectedIndex() == 1){
-					neuer_name=_logik.getNewNames_tv(_gui.textField_prefix.getText(), _gui.textField_staffel.getText(), _logik.getOldNames(path), c2,c3,c4,c5);
+					new_name=_logik.getNewNames_tv(_gui.textField_prefix.getText(), _gui.textField_season.getText(), _logik.getOldNames(path), c2,c3,c4,c5);
 					 _gui.btnRename.setEnabled(true);
-					 _gui.updateList_new(neuer_name);
+					 _gui.updateList_new(new_name);
 				}
 				
 				
 				if (_gui.tabbedPane.getSelectedIndex() == 2){
-					neuer_name=_logik.getNewNames_song(_logik.getOldNames(path));
+					new_name=_logik.getNewNames_brackets(_logik.getOldNames(path));
 					 _gui.btnRename.setEnabled(true);
-					 _gui.updateList_new(neuer_name);
+					 _gui.updateList_new(new_name);
 				}
 					
 					
-				alter_name=_logik.getOldNames(path);
+				old_name=_logik.getOldNames(path);
 				
 			}
 			catch(Exception e1)
@@ -91,13 +91,13 @@ public class Actions {
 		
 		if((_gui.tabbedPane.getSelectedIndex() == 1 && _gui.textField_prefix.getText().length() >0) || _gui.tabbedPane.getSelectedIndex() == 2){
 		
-			//Listen "speichern" für einen Undo
+			//"save" lists to be able to undo
 			path_backup = path;
-			neuer_name_backup = neuer_name;
-			alter_name_backup = alter_name;
+			new_name_backup = new_name;
+			old_name_backup = old_name;
 			
 			
-			_logik.rename(path, neuer_name, alter_name);
+			_logik.rename(path, new_name, old_name);
 			_gui.btnUndo.setEnabled(true);
 			
 			openDir();
@@ -121,12 +121,12 @@ public class Actions {
 	public void undoRename(){
 
 		
-		_logik.rename(path_backup, alter_name_backup, neuer_name_backup);
+		_logik.rename(path_backup, old_name_backup, new_name_backup);
 		_gui.btnUndo.setEnabled(false);
 		openDir();
 	}
 	
-	//Beim Klicken auf ein Listenelement
+	//when an element in a list is clicked
 	public void handleListEvent(ListSelectionEvent e){
 		
 		if(!e.getValueIsAdjusting()){
@@ -143,7 +143,7 @@ public class Actions {
 		}//end if
 	}//end action_listEvent()
 	
-	//Wenn Tab "About" gewählt wird, Buttons deaktivieren und Liste leeren
+	//when tab "About" is enabled, disable buttons and clear list
 	public void handleTabbedPaneEvent(){
 		
 		if (_gui.tabbedPane.getSelectedIndex() == 0)
@@ -173,8 +173,8 @@ public class Actions {
 			
 			}
 		
-			neuer_name = _logik.getNewNames_tv(_gui.textField_prefix.getText(), _gui.textField_staffel.getText(), oldList_names, _gui.chckbx2.isSelected(), _gui.chckbx3.isSelected(), _gui.chckbx4.isSelected(), _gui.chckbx5.isSelected());
-			_gui.updateList_new(neuer_name);
+			new_name = _logik.getNewNames_tv(_gui.textField_prefix.getText(), _gui.textField_season.getText(), oldList_names, _gui.chckbx2.isSelected(), _gui.chckbx3.isSelected(), _gui.chckbx4.isSelected(), _gui.chckbx5.isSelected());
+			_gui.updateList_new(new_name);
 			_gui.list2.setSelectedIndex(_gui.list.getSelectedIndex());
 			
 		}

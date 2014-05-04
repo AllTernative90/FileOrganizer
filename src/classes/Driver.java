@@ -20,17 +20,11 @@ public class Driver implements ActionListener, ListSelectionListener, ChangeList
 	 */
 	
 	
-	//To Do:
-	//neuer modus: unterstrich in leerzeichen und umgekehrt
-	//rename anpassen, dass es überall geht
-	//multi selection in list
-	
-	
 	public static GUI _gui;
-	public static Logik _logik;
+	public static Logik _logic;
 	public static Actions _actions;
 	public static OptionPanes _optionPanes;
-	static Dimension bildschirm;
+	static Dimension screen;
 	
 	public static int success = 0;
 	public static int failed = 0;
@@ -42,7 +36,7 @@ public class Driver implements ActionListener, ListSelectionListener, ChangeList
 				try {
 					
 					_gui = new GUI();	
-					_logik = new Logik();
+					_logic = new Logik();
 					_actions = new Actions();
 					_optionPanes = new OptionPanes();
 					
@@ -50,7 +44,7 @@ public class Driver implements ActionListener, ListSelectionListener, ChangeList
 					_gui.setResizable(false);
 					
 					try{
-					_gui.setBounds((bildschirm.width-900)/2, (bildschirm.height-730)/2, 900,730);
+					_gui.setBounds((screen.width-900)/2, (screen.height-730)/2, 900,730);
 					}
 					catch(Exception e){}
 							
@@ -66,7 +60,7 @@ public class Driver implements ActionListener, ListSelectionListener, ChangeList
 	}//end main()
 
 	
-	//entscheidet was gedrückt wurde und ruft dann die entsprechenden Aktionen auf
+	//checks what has been clicked and calls the according method
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	
@@ -76,7 +70,7 @@ public class Driver implements ActionListener, ListSelectionListener, ChangeList
 				_actions.openDir();
 				break;
 
-			//checkt ob das optionPane mit JA bestätigt wurde, dann wird geschaut ob der rename geklappt hat und das entsprechende Pane angezeigt
+			//checks whether YES was chosen in the optionPane; checks if renaming was successful and shows the correct optionPane
 			case BTN_RENAME:
 				if(_optionPanes.renameFiles()==0){
 					if(_actions.renameFiles()==false){
@@ -108,7 +102,7 @@ public class Driver implements ActionListener, ListSelectionListener, ChangeList
 				}
 				break;
 			
-			//CHECKBOX_1 ist nicht auswählbar
+			//CHECKBOX_1 cannot be disabled
 			case CHECKBOX_2:
 			case CHECKBOX_4:
 			case CHECKBOX_5:
@@ -117,12 +111,12 @@ public class Driver implements ActionListener, ListSelectionListener, ChangeList
 			
 			case CHECKBOX_3:
 				if(_gui.chckbx3.isSelected()){
-					_gui.lblStaffel.setEnabled(true);
-					_gui.textField_staffel.setEnabled(true);
+					_gui.lblSeason.setEnabled(true);
+					_gui.textField_season.setEnabled(true);
 				}
 				else{
-					_gui.lblStaffel.setEnabled(false);
-					_gui.textField_staffel.setEnabled(false);
+					_gui.lblSeason.setEnabled(false);
+					_gui.textField_season.setEnabled(false);
 				}
 				_actions.openDir();
 				break;
@@ -131,14 +125,14 @@ public class Driver implements ActionListener, ListSelectionListener, ChangeList
 	}//end actionPerformed()
 	
 	
-	//beim Anklicken eines Eintrags in den JLists
+	//when an element in a JList is clicked
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 			_actions.handleListEvent(e);
 	}
 
 
-	//beim Anklicken von den Modus Tabs
+	//when a mode-tab is clicked (e.g. "about")
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
 		_actions.handleTabbedPaneEvent();
@@ -146,7 +140,7 @@ public class Driver implements ActionListener, ListSelectionListener, ChangeList
 
 	
 	
-	//beim Text eingeben in ein Textfeld
+	//when text is entered in a textfield
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 		_actions.handleTextFieldInsert();

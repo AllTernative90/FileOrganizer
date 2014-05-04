@@ -15,18 +15,18 @@ public class Logik  {
 	OptionPanes _optionPanes = (Driver._optionPanes);
 	
 	
-	//der technische Vorgang des Umbennenens - die Dateinamen werden in den getNewNames Methoden spezifiziert
-	public void rename(String path, List<String> neuer_name, List<String> alter_name){
+	//renaming the files - the filenames are specified in the methods getNewNames() specified
+	public void rename(String path, List<String> new_name, List<String> old_name){
 		
 			int success = 0;
 			int fail = 0;
 			
-			int len1 = neuer_name.size();
+			int len1 = new_name.size();
 			for (int i=0;i<len1; i++)
 				{
 				
-				File oldfile =new File(path + "/" + alter_name.get(i));
-				File newfile =new File(path + "/" + neuer_name.get(i));
+				File oldfile =new File(path + "/" + old_name.get(i));
+				File newfile =new File(path + "/" + new_name.get(i));
 				
 				if(oldfile.renameTo(newfile)){
 					success++;
@@ -42,17 +42,18 @@ public class Logik  {
 	}//end rename()
 	
 	
-	//Dateien aus Unterverzeichnissen holen
+	//move files from subfolders to the specified path
 	static void moveFiles(File aFile, String path) {
 		
-			//prüfen, ob es sich um eine Datei oder ein Verzeichnis handelt
+			//check if it's a file or a directory when cycling through elements
 		    if(aFile.isFile()){
 		    	
-		    	//prüfen, ob die Datei im Root Verzeichnis der Operation ist, um so nicht automatisch Dateien umzubenennen, die im Root-Dir liegen
+		    	//check if the file is in the root-path. this way files in the root-directory won't be renamed
+		    	//this must be implemented, due to the renaming scheme
 		    	if(aFile.getParent().equals(path))
 		    		homeDir = true;
 		    	
-		      //prüfen, ob es ein Slash am Ende des Pfades gibt
+		      //check if path is ending with a slash
 		      if (!path.endsWith("\\")){
 		    	  
 		    	  if(new File(path+("\\")+aFile.getName()).exists()==true && homeDir==false){
@@ -111,40 +112,40 @@ public class Logik  {
 	}
 
 	
-	public List<String> getNewNames_song(List<String> dir){
+	public List<String> getNewNames_brackets(List<String> dir){
 		
 		
 			List<String> extension = new ArrayList<String>();
-			List<String> neuer_name = new ArrayList<String>();
+			List<String> new_name_list = new ArrayList<String>();
 			String ext = "";
-			String neu = "";
+			String new_name = "";
 		
 			int len1 = dir.size();
 			for (int i=0;i<len1; i++)
 			{
 		
-					//gibt ".xxx" zurück, die extension mit Punkt
+					//return ".xxx", the filextension including the dot
 					ext = dir.get(i).substring(dir.get(i).lastIndexOf("."), dir.get(i).length());
 					extension.add(i, ext);
 				
 				if (dir.get(i).lastIndexOf("(") != -1){
-					//gibt den Songnamen mit extension zurück, aber ohne die letzte Klammer mit Codecinfos
-					neu = (dir.get(i).substring(0, dir.get(i).lastIndexOf("("))) + extension.get(i);		
-					neuer_name.add(i, neu);
+					//returns the filename with extension, but without the last bracket and everything after that
+					new_name = (dir.get(i).substring(0, dir.get(i).lastIndexOf("("))) + extension.get(i);		
+					new_name_list.add(i, new_name);
 				}
 				else{
-					neuer_name.add(i, dir.get(i));
+					new_name_list.add(i, dir.get(i));
 				}
 			}
-		return neuer_name;
+		return new_name_list;
 	}//end getNewNames_song()
 	
 	
-	public List<String> getNewNames_tv(String show, String staffel, List<String> dir, Boolean c2, Boolean c3, Boolean c4, Boolean c5){		
+	public List<String> getNewNames_tv(String show, String season, List<String> dir, Boolean c2, Boolean c3, Boolean c4, Boolean c5){		
 		
 		
 			List<String> extension = new ArrayList<String>();
-			List<String> neue_namen = new ArrayList<String>();
+			List<String> new_names = new ArrayList<String>();
 			String ext = "";
 				
 			Pattern pattern = Pattern.compile("[sS][0-9]{2}?[eE][0-9]{2}?");
@@ -155,29 +156,29 @@ public class Logik  {
 			
 			String episode = "";
 			String episode2 = "";
-			boolean gefunden = false;
+			boolean found = false;
 		
 		
 			int len1 = dir.size();
 			for (int i=0;i<len1; i++)
 			{
 		
-				//gibt ".xxx" zurück, die extension mit Punkt
+				//return ".xxx", the filextension including the dot
 				ext = dir.get(i).substring(dir.get(i).lastIndexOf("."), dir.get(i).length());
 				extension.add(i, ext);
 				
-				gefunden = false;
+				found = false;
 				
 				
 				Matcher matcher = pattern.matcher(dir.get(i));
 				
 				 while (matcher.find()) {
 				      episode = matcher.group();
-				      gefunden = true;
+				      found = true;
 				    }
 				 
 				 
-				 if (gefunden == false && c2 == true){
+				 if (found == false && c2 == true){
 					 
 						
 							Matcher matcher2 = pattern2.matcher(dir.get(i));
@@ -193,71 +194,71 @@ public class Logik  {
 							      else{
 							    	  episode = "s0" + episode2.substring(0,1) + "e" + episode2.substring(2,4);
 							      }
-							      gefunden=true;
+							      found=true;
 							    }
 				 }
 				 
 				 
-			 	if (gefunden == false && c3 == true){
+			 	if (found == false && c3 == true){
 					
 							Matcher matcher3 = pattern3.matcher(dir.get(i));
 							
 							 while (matcher3.find()) {
 							      episode2 = matcher3.group();
 							      
-							      if(staffel.length()>1){
-							    	  episode = "s" + staffel + "e" + episode2.substring(1,3);
+							      if(season.length()>1){
+							    	  episode = "s" + season + "e" + episode2.substring(1,3);
 							      }
 							      else
 							      {
-							    	  episode = "s0" + staffel + "e" + episode2.substring(1,3);
+							    	  episode = "s0" + season + "e" + episode2.substring(1,3);
 							      }
 							      
-							      gefunden=true;
+							      found=true;
 							    }
 				 }
 				 
 			 	
-			 	if (gefunden == false && c4 == true){
+			 	if (found == false && c4 == true){
 					
 					Matcher matcher4 = pattern4.matcher(dir.get(i));
 					
 					 while (matcher4.find()) {
 					      episode2 = matcher4.group();
 					      episode = "s0" + episode2.substring(1,2) + "e" + episode2.substring(2,4);
-					      gefunden=true;
+					      found=true;
 					    }
 			 	}
 			 	
 			 	
 			 	
-			 	if (gefunden == false && c5 == true){
+			 	if (found == false && c5 == true){
 					
 					Matcher matcher5 = pattern5.matcher(dir.get(i));
 					
 					 while (matcher5.find()) {
 					      episode2 = matcher5.group();
 					      episode = "s0" + episode2.substring(0,1) + "e" + episode2.substring(1,3);
-					      gefunden=true;
+					      found=true;
 					    }
 			 	}
 			 	
 			 	
 			 	
 		 
-				 if(gefunden == true){
-					 neue_namen.add(i,show + " - " + episode.toLowerCase() + extension.get(i));
+				 if(found == true){
+					 new_names.add(i,show + " - " + episode.toLowerCase() + extension.get(i));
 				 }
 				 else{
-					 neue_namen.add(i,dir.get(i));
+					 new_names.add(i,dir.get(i));
 				 }
 				 
 				 
 				 
 				 
 				
-			}//end for Schleife
-		return neue_namen;
+			}//end for loop
+		return new_names;
 	}//end getNewNames_tv()
 
 	

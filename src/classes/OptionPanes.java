@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 public class OptionPanes implements IConstants {
 	
 	GUI _gui = (Driver._gui);
-	Logik _logik = (Driver._logik);
+	Logik _logik = (Driver._logic);
 	
 	
 	public int moveFiles(){
