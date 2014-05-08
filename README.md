@@ -2,6 +2,11 @@ File Organizer 0.5 Beta
 ========
 A small program for organizing and renaming files in various cases.
 
+Download
+------------------
+You can get it frome [here] (https://github.com/AllTernative90/FileOrganizer/releases) as an executable jar file.
+
+
 What Can It Do?
 ----------------------------
 1. Move files out of subfolders of a directory to it's root.
@@ -27,3 +32,4 @@ The way of renaming the files can result in an error on some systems.
 For example is it not possible to rename files in Windows when the directory is the root of the windows installation, in most cases C:.
 There might be problems renaming files on other operating systems, too. I wasn't able to check for that, though.
 
+Different PPI on a monitor might result in problems with the UI. This might be related to various resolutions.
