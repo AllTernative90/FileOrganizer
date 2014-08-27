@@ -1,5 +1,7 @@
-File Organizer 0.5 Beta
+File Organizer 0.5 Beta (Discontinued)
 ========
+**This project is discontinued, since FileBot is a much better alternative.**
+
 A small program for organizing and renaming files in various cases.
 
 Download
